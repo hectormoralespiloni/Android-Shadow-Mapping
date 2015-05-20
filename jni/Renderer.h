@@ -24,6 +24,7 @@ public:
 	Renderer();
 	~Renderer();
 
+	void LoadShader(string technique, string vs, string ps, string *attributes, string *uniforms);
 	void Initialize(int width, int height);
 	void OnStop();
 	void OnDrawFrame();
