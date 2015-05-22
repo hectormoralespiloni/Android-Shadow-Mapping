@@ -4,10 +4,14 @@
 //@Author:	Hector Morales Piloni
 //@Date:	April 12, 2015
 //-----------------------------------------------------------------------------
-#include "Shape.h"
+#include <inc/Shape.h>
 
 Shape::Shape()
 {
+	_mShader = NULL;
+	_mIndices = NULL;
+	_mVertices = _mNormals = _mColors = NULL;
+	_mIBOIndices = _mVBOVertices = _mVBOColors = _mVBONormals = 0;
 	_mPosX = _mPosY = _mPosZ = 0.0f;
 	_mScaleX = _mScaleY = _mScaleZ = 1.0f;
 	_mRotAngleX = _mRotAngleY = _mRotAngleZ = 0.0f;
@@ -15,6 +19,20 @@ Shape::Shape()
 
 Shape::~Shape()
 {
+	if(_mShader)
+		delete _mShader;
+	if(_mVertices)
+		delete _mVertices;
+	if(_mNormals)
+		delete _mNormals;
+	if(_mColors)
+		delete _mColors;
+	if(_mIndices)
+		delete _mIndices;
+
+	_mShader = NULL;
+	_mVertices = _mNormals = _mColors = NULL;
+	_mIndices = NULL;
 }
 
 void Shape::SetPosition(float x, float y, float z)

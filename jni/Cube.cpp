@@ -4,7 +4,7 @@
 //@Author:	Hector Morales Piloni
 //@Date:	April 12, 2015
 //-----------------------------------------------------------------------------
-#include "Cube.h"
+#include <inc/Cube.h>
 
 Cube::Cube()
 {

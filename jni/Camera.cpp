@@ -4,7 +4,7 @@
 //@Author:	Hector Morales Piloni
 //@Date:	April 14, 2015
 //-----------------------------------------------------------------------------
-#include "Camera.h"
+#include <inc/Camera.h>
 
 //In order to avoid Linkage problems
 //we need to define static members in the implementation file

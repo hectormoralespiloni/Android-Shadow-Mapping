@@ -11,7 +11,7 @@ public class MainActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
         //Create a GLSurfaceView instance and set it
         //as the ContentView for this Activity.
         mSurfaceView = new GLSurfaceViewWrapper(this);

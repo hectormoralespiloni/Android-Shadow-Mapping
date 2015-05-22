@@ -1,4 +1,4 @@
-#include "Renderer.h"
+#include <inc/Renderer.h>
 #include <jni.h>
 
 #ifndef _Included_verman_androidshadowmapping_LibJNIWrapper
@@ -16,34 +16,43 @@ JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_OnSurfaceC
 
 JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_OnDrawFrame(JNIEnv *, jclass)
 {
-	renderer->OnDrawFrame();
+	renderer->DrawFrame();
 }
 
-JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_OnSurfaceChanged(JNIEnv *env, jclass, jint w, jint h, jstring technique, jstring vs, jstring ps, jobjectArray attributes, jobjectArray uniforms)
+JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_NativeInit(JNIEnv *, jclass, jint w, jint h)
 {
-	/*
-	string *attributeArray;
-	string *uniformArray;
+	renderer->Initialize(w,h);
+}
 
-	int countAttr = env->GetArrayLength(attributes);
-	int countUnif = env->GetArrayLength(uniforms);
-	attributeArray = new string[countAttr];
-	uniformArray = new string[countUnif];
+JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_LoadShader(JNIEnv *env, jclass, jint technique, jstring vs, jstring ps, jobjectArray attributes, jobjectArray uniforms)
+{
+	int countA = env->GetArrayLength(attributes);
+	int countU = env->GetArrayLength(uniforms);
 
-	for (int i=0; i<countAttr; i++){
+	//Create arrays that will hold the attributes and uniforms
+	string attributeArray[countA];
+	string uniformArray[countU];
+
+	for (int i=0; i<countA; i++)
+	{
 		jstring s = (jstring)env->GetObjectArrayElement(attributes, i);
 		attributeArray[i] = env->GetStringUTFChars(s, 0);
 	}
 
-	for (int i=0; i<countUnif; i++){
+	for (int i=0; i<countU; i++)
+	{
 		jstring s = (jstring)env->GetObjectArrayElement(uniforms, i);
 		uniformArray[i] = env->GetStringUTFChars(s, 0);
 	}
 
-	renderer->LoadShader(env->GetStringUTFChars(technique, 0), env->GetStringUTFChars(vs, 0), env->GetStringUTFChars(ps, 0), attributeArray, uniformArray);
-	*/
-
-	renderer->Initialize(w,h);
+	//For some reason inside LoadShader sizeof(string[]) is not returning the size of
+	//the whole array, just one string, thus we're passing the number of elements in countX
+	renderer->LoadShader(
+			(ShaderWrapper::technique) technique,
+			env->GetStringUTFChars(vs, 0),
+			env->GetStringUTFChars(ps, 0),
+			attributeArray, countA,
+			uniformArray, countU);
 }
 
 JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_OnStop(JNIEnv *, jclass)

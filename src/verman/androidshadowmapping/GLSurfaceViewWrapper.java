@@ -14,9 +14,9 @@ public class GLSurfaceViewWrapper extends GLSurfaceView
         setEGLContextClientVersion(2);
         setEGLConfigChooser(8,8,8,8,16,0);
 
-        mRenderer = new GLRendererWrapper();
+        mRenderer = new GLRendererWrapper(context);             
 
         //Set the Renderer for drawing on the GLSurfaceView
-        setRenderer(mRenderer);
+        setRenderer(mRenderer);       
 	}
 }

@@ -21,14 +21,20 @@
 class Renderer
 {
 public:
+	//enum shader_technique {GOURAUD, PHONG, SHADOWMAP};
+
 	Renderer();
 	~Renderer();
 
-	void LoadShader(string technique, string vs, string ps, string *attributes, string *uniforms);
 	void Initialize(int width, int height);
-	void OnStop();
-	void OnDrawFrame();
-	//void OnSurfaceChanged(int width, int height);
+	void DrawFrame();
+	void LoadShader(ShaderWrapper::technique t,
+			string vs,				//Vertex shader source code
+			string ps, 				//Pixel shader source code
+			string attributes[], 	//Array with attribute variables
+			int countA, 			//Size of attributes array
+			string uniforms[], 		//Array with uniform variables
+			int countU);			//Size of uniforms array
 
 private:
 	int _mWindowHeight;
@@ -44,7 +50,7 @@ private:
 	//Container that maps a shader technique with
 	//an actual ShaderWrapper object that can be
 	//attached to different geometry
-	map<string, ShaderWrapper*> _mShader;
+	map<ShaderWrapper::technique, ShaderWrapper*> _mShader;
 };
 
 #endif
