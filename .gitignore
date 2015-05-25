@@ -1,0 +1,10 @@
+#Ignore project files
+.classpath
+.cproject
+.project
+
+#Ignore binary files and intermediate output files
+/bin
+/gen
+/libs
+/obj
