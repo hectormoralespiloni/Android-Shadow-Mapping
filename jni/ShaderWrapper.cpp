@@ -92,13 +92,21 @@ void ShaderWrapper::SetUniform(string name)
 
 GLint ShaderWrapper::GetAttributeID(string name)
 {
+	//if map.find cannot find the value, returns map::end
 	std::map<string,int>::iterator it = _mAttribute.find(name);
-	return it->second;
+	if(it == _mAttribute.end())
+		return -1;
+	else
+		return it->second;
 }
 
 GLint ShaderWrapper::GetUniformID(string name)
 {
+	//if map.find cannot find the value, returns map::end
 	std::map<string,int>::iterator it = _mUniform.find(name);
-	return it->second;
+	if(it == _mUniform.end())
+		return -1;
+	else
+		return it->second;
 }
 

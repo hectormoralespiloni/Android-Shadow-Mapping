@@ -34,6 +34,7 @@ public:
 	void SetRotation(float x, float y, float z);
 	void SetScale(float x, float y, float z);
 	void SetPosition(float x, float y, float z);
+	inline float Deg2Rad(float degrees) { return degrees * 3.14159265f / 180.0f; }
 
 protected:
 	mat4 _mModelViewMatrix;

@@ -146,8 +146,8 @@ void Floor::Draw()
 	}
 
 	//Create our transformation matrices
-	_mRotAngleX = 30.0f * 3.14159265f / 180.0f;
-	_mRotAngleY = 45.0f * 3.14159265f / 180.0f;
+	_mRotAngleX = Deg2Rad(30.0f);
+	_mRotAngleY = Deg2Rad(45.0f);
 
 	_mModelViewMatrix = mat4(1.0f);
 	_mRotationMatrix = glm::rotate(mat4(1.0f), _mRotAngleX, vec3(1.0f, 0.0f, 0.0f));
@@ -157,11 +157,11 @@ void Floor::Draw()
 	_mModelViewMatrix = _mTranslationMatrix * _mScaleMatrix * _mRotationMatrix * _mModelViewMatrix;
 	mat4 modelViewProjection = Camera::GetProjectionMatrix() * Camera::GetLookAtMatrix() * _mModelViewMatrix;
 
-	//mat4 lightLookAtMatrix = glm::lookAt(Light::GetPosition(), vec3(0.0f,0.0f,0.0f), vec3(0.0f,1.0f,0.0f));
-	//if (_mShader->GetUniformID("lightProjectionMatrix")>=0)
-	//	glUniformMatrix4fv(_mShader->GetUniformID("lightProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(Camera::GetProjectionMatrix()));
-	//if (_mShader->GetUniformID("lightViewMatrix")>=0)
-	//	glUniformMatrix4fv(_mShader->GetUniformID("lightViewMatrix"), 1, GL_FALSE, glm::value_ptr(lightLookAtMatrix));
+	mat4 lightLookAtMatrix = glm::lookAt(Light::GetPosition(), vec3(0.0f,0.0f,0.0f), vec3(0.0f,1.0f,0.0f));
+	if (_mShader->GetUniformID("lightProjectionMatrix")>=0)
+		glUniformMatrix4fv(_mShader->GetUniformID("lightProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(Camera::GetProjectionMatrix()));
+	if (_mShader->GetUniformID("lightViewMatrix")>=0)
+		glUniformMatrix4fv(_mShader->GetUniformID("lightViewMatrix"), 1, GL_FALSE, glm::value_ptr(lightLookAtMatrix));
 
 	if (_mShader->GetUniformID("modelViewProjectionMatrix") >= 0)
 		glUniformMatrix4fv(_mShader->GetUniformID("modelViewProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(modelViewProjection));
