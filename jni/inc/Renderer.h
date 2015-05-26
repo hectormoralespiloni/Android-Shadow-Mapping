@@ -15,6 +15,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Camera.h"
 #include "Light.h"
+#include "Floor.h"
 #include "Cube.h"
 #include "ShaderWrapper.h"
 
@@ -42,7 +43,7 @@ private:
 
 	Camera *_mCamera;
 	Light *_mLight;
-	//Floor _mFloor;
+	Floor *_mFloor;
 	Cube *_mCube;
 	//Sphere _mSphere;
 	//Torus _mTorus;

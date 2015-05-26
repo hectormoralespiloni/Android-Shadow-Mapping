@@ -221,8 +221,8 @@ void Cube::Draw()
 
 
 	//Update cube's rotation angles for animation
-	_mRotAngleX += 0.05;
-	_mRotAngleY += 0.05;
+	_mRotAngleX += 2.0 * 3.14159265f / 180.0f;
+	_mRotAngleY += 2.0 * 3.14159265f / 180.0f;
 	if (_mRotAngleX >= 360) _mRotAngleX -= 360;
 	if (_mRotAngleY >= 360) _mRotAngleY -= 360;
 
