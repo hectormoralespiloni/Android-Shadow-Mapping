@@ -91,25 +91,3 @@ void Renderer::LoadShader(ShaderWrapper::technique t, string attributes[], int s
 
 	_mShader[t] = shader;
 }
-
-void Renderer::LoadShader(ShaderWrapper::technique t, string vs, string ps, string attributes[], int countA, string uniforms[], int countU)
-{
-	/*
-	ShaderWrapper *shader;
-	shader = new ShaderWrapper();
-	shader->ProcessTechnique(vs, ps);
-
-	//Originally we were using sizeof(attributes)/sizeof(attributes[0])
-	//but sizeof is returning only 1 string, not the whole array
-
-	for(int i=0; i<countA; i++){
-		shader->SetAttribute(attributes[i]);
-	}
-
-	for(int i=0; i<countU; i++){
-		shader->SetUniform(uniforms[i]);
-	}
-
-	_mShader[t] = shader;
-	*/
-}

@@ -23,7 +23,6 @@ public:
 	ShaderWrapper();
 	~ShaderWrapper();
 	void ProcessTechnique(technique t);
-	void ProcessTechnique(string vs, string ps);
 	void UseTechnique();
 	void SetAttribute(string name);
 	void SetUniform(string name);
