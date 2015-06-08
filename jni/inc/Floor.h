@@ -9,7 +9,7 @@
 #include "Shape.h"
 #include "Light.h"
 #include "Camera.h"
-//#include "Texture.h"
+#include "stb_image.h"
 
 class Floor : public Shape
 {

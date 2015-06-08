@@ -20,8 +20,8 @@ public class GLRendererWrapper implements Renderer
 		LibJNIWrapper.OnSurfaceCreated();
 		
 		//Load all shaders here, will be used later on initialization
-		String vs = RawResourceReader.readTextFile(appCtx, R.raw.gouraud_vs);
-		String ps = RawResourceReader.readTextFile(appCtx, R.raw.gouraud_ps);
+		String vs = "";//RawResourceReader.readTextFile(appCtx, R.raw.gouraud_vs);
+		String ps = "";//RawResourceReader.readTextFile(appCtx, R.raw.gouraud_ps);
 		String[] attributes = {"color", "position", "normal", "texCoords"};
 		String[] uniforms = {"modelViewProjectionMatrix", "modelViewMatrix", "lightPosition", "useTexture", "texture0"};		
 		LibJNIWrapper.LoadShader(0, vs, ps, attributes, uniforms);

@@ -55,6 +55,13 @@ void Renderer::Initialize(int width, int height)
 	_mCamera->SetProjectionMatrix(projectionMatrix);
 	_mCamera->SetLookAtMatrix(lookAtMatrix);
 
+	//Load shaders
+	string attributes[] = {"color", "position", "normal", "texCoords"};
+	string uniforms[] = {"modelViewProjectionMatrix", "modelViewMatrix", "lightPosition", "useTexture", "texture0"};
+	int sizeA = sizeof(attributes)/sizeof(attributes[0]);
+	int sizeU = sizeof(uniforms)/sizeof(uniforms[0]);
+	LoadShader(ShaderWrapper::GOURAUD, attributes, sizeA, uniforms, sizeU);
+
 	//Initialize the geometry
 	_mFloor = new Floor();
 	_mFloor->Initialize();
@@ -68,8 +75,26 @@ void Renderer::Initialize(int width, int height)
 	_mCube->AttachShader(_mShader[ShaderWrapper::GOURAUD]);
 }
 
+void Renderer::LoadShader(ShaderWrapper::technique t, string attributes[], int sizeA, string uniforms[], int sizeU)
+{
+	ShaderWrapper *shader;
+	shader = new ShaderWrapper();
+	shader->ProcessTechnique(t);
+
+	for(int i=0; i<sizeA; i++) {
+		shader->SetAttribute(attributes[i]);
+	}
+
+	for(int i=0; i<sizeU; i++) {
+		shader->SetUniform(uniforms[i]);
+	}
+
+	_mShader[t] = shader;
+}
+
 void Renderer::LoadShader(ShaderWrapper::technique t, string vs, string ps, string attributes[], int countA, string uniforms[], int countU)
 {
+	/*
 	ShaderWrapper *shader;
 	shader = new ShaderWrapper();
 	shader->ProcessTechnique(vs, ps);
@@ -86,4 +111,5 @@ void Renderer::LoadShader(ShaderWrapper::technique t, string vs, string ps, stri
 	}
 
 	_mShader[t] = shader;
+	*/
 }

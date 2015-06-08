@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------------------
 #pragma once
 
-#include <android/log.h>
+#include <inc/FileReader.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <string>
@@ -22,6 +22,7 @@ public:
 
 	ShaderWrapper();
 	~ShaderWrapper();
+	void ProcessTechnique(technique t);
 	void ProcessTechnique(string vs, string ps);
 	void UseTechnique();
 	void SetAttribute(string name);

@@ -1,5 +1,7 @@
 package verman.androidshadowmapping;
 
+import android.content.res.AssetManager;
+
 public class LibJNIWrapper 
 {
 	static {
@@ -11,4 +13,5 @@ public class LibJNIWrapper
     public static native void NativeInit(int width, int height);
     public static native void LoadShader(int technique, String vs, String ps, String[] attributes, String[] uniforms);
     public static native void OnDrawFrame();
+    public static native void CreateAssetMgr(AssetManager assetManager);
 }

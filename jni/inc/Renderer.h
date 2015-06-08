@@ -30,6 +30,11 @@ public:
 	void Initialize(int width, int height);
 	void DrawFrame();
 	void LoadShader(ShaderWrapper::technique t,
+			string attributes[],//Array with attribute variables
+			int sizeA,			//Size of attributes array
+			string uniforms[],	//Array with uniform variables
+			int sizeU);			//Size of uniforms array
+	void LoadShader(ShaderWrapper::technique t,
 			string vs,				//Vertex shader source code
 			string ps, 				//Pixel shader source code
 			string attributes[], 	//Array with attribute variables

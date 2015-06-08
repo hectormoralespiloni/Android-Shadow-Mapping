@@ -1,5 +1,8 @@
 #include <inc/Renderer.h>
+#include <inc/FileReader.h>
 #include <jni.h>
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 
 #ifndef _Included_verman_androidshadowmapping_LibJNIWrapper
 #define _Included_verman_androidshadowmapping_LibJNIWrapper
@@ -22,6 +25,12 @@ JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_OnDrawFram
 JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_NativeInit(JNIEnv *, jclass, jint w, jint h)
 {
 	renderer->Initialize(w,h);
+}
+
+JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_CreateAssetMgr(JNIEnv *env, jclass, jobject assetManager)
+{
+	AAssetManager* mgr = AAssetManager_fromJava(env, assetManager);
+	FileReader::SetAssetManager(mgr);
 }
 
 JNIEXPORT void JNICALL Java_verman_androidshadowmapping_LibJNIWrapper_LoadShader(JNIEnv *env, jclass, jint technique, jstring vs, jstring ps, jobjectArray attributes, jobjectArray uniforms)

@@ -91,18 +91,36 @@ bool Floor::Initialize()
 	_mTexCoords = NULL;
 
 	//load texture from file
-	string texturePath = "assets/floor.raw";
-	unsigned char *textureData = NULL;
-	//Texture::loadData(texturePath.c_str(), &textureData);
+	const char *texturePath = "floor.jpg";
+	char *textureData = NULL;
+	unsigned int size = 0;
+
+	FileReader::Read(texturePath, &textureData, &size);
+    int width, height, numComponents;
+    unsigned char* pData = stbi_load_from_memory((unsigned char*)textureData, size, &width, &height, &numComponents, 0);
+
+    GLenum format;
+    switch(numComponents){
+    case 3:
+    	format = GL_RGB;
+    	break;
+    case 4:
+    	format = GL_RGBA;
+    	break;
+    default:
+    	//Error unknown/invalid format
+    	assert(0);
+    	return false;
+    }
 
 	//setup texturing
-	//glGenTextures(1, &_mTextureID);
-	//glBindTexture(GL_TEXTURE_2D, _mTextureID);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 512, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glGenTextures(1, &_mTextureID);
+	glBindTexture(GL_TEXTURE_2D, _mTextureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pData);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR)
@@ -171,14 +189,13 @@ void Floor::Draw()
 		glUniform3f(_mShader->GetUniformID("lightPosition"), Light::GetPosition().x, Light::GetPosition().y, Light::GetPosition().z);
 
 	//Here we enable texture unit 0 that contains our floor texture previously set
-	glUniform1i(_mShader->GetUniformID("useTexture"), 0);
 	if (_mShader->GetUniformID("texture0") >= 0)
 	{
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, _mTextureID);
-		//glUniform1i(_mShader->GetUniformID("texture0"), 0);
-		//if (_mShader->GetUniformID("useTexture") >= 0)
-		//	glUniform1i(_mShader->GetUniformID("useTexture"), 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _mTextureID);
+		glUniform1i(_mShader->GetUniformID("texture0"), 0);
+		if (_mShader->GetUniformID("useTexture") >= 0)
+			glUniform1i(_mShader->GetUniformID("useTexture"), 1);
 	}
 
 	//Bind our IBO and instead of passing the indices buffer to glDrawElements

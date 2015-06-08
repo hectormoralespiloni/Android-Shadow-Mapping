@@ -21,8 +21,28 @@ void ShaderWrapper::UseTechnique()
 	glUseProgram(_mShaderProgramID);
 }
 
-void ShaderWrapper::ProcessTechnique(string vs, string ps)
+void ShaderWrapper::ProcessTechnique(technique t)
 {
+	const char *vertFileName = NULL;
+	const char *fragFileName = NULL;
+
+	switch(t) {
+	case ShaderWrapper::GOURAUD:
+		vertFileName = "gouraud.vert";
+		fragFileName = "gouraud.frag";
+		break;
+	case ShaderWrapper::PHONG:
+		vertFileName = "phong.vert";
+		fragFileName = "phong.frag";
+		break;
+	case ShaderWrapper::SHADOWMAP:
+		vertFileName = "shadowmap.vert";
+		fragFileName = "shadowmap.frag";
+		break;
+	default:
+		break;
+	}
+
 	//Clear every attribute & uniform previously defined so we can start over
 	_mAttribute.clear();
 	_mUniform.clear();
@@ -32,9 +52,12 @@ void ShaderWrapper::ProcessTechnique(string vs, string ps)
 	vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-	//Get shader source
-    const char *vertShaderStr = vs.c_str();
-    const char *fragShaderStr = ps.c_str();
+    char *vertShaderStr = NULL;
+    char *fragShaderStr = NULL;
+    unsigned int size = 0;
+
+    FileReader::Read(vertFileName, &vertShaderStr, &size);
+    FileReader::Read(fragFileName, &fragShaderStr, &size);
 
     GLint result = GL_FALSE;
     int logLength;
@@ -48,8 +71,7 @@ void ShaderWrapper::ProcessTechnique(string vs, string ps)
     glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &logLength);
     vector<char> vertShaderError((logLength > 1) ? logLength : 1);
     glGetShaderInfoLog(vertexShaderID, logLength, NULL, &vertShaderError[0]);
-    __android_log_print(ANDROID_LOG_DEBUG, "ShaderWrapper.cpp", "Vertex Error: %s", &vertShaderError[0]);
-
+    //__android_log_print(ANDROID_LOG_DEBUG, "ShaderWrapper.cpp", "Vertex Error: %s", &vertShaderError[0]);
 
     // Compile fragment shader
     glShaderSource(fragmentShaderID, 1, &fragShaderStr, NULL);
@@ -60,7 +82,7 @@ void ShaderWrapper::ProcessTechnique(string vs, string ps)
     glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &logLength);
     vector<char> fragShaderError((logLength > 1) ? logLength : 1);
     glGetShaderInfoLog(fragmentShaderID, logLength, NULL, &fragShaderError[0]);
-    __android_log_print(ANDROID_LOG_DEBUG, "ShaderWrapper.cpp", "Fragment Error: %s", &fragShaderError[0]);
+    //__android_log_print(ANDROID_LOG_DEBUG, "ShaderWrapper.cpp", "Fragment Error: %s", &fragShaderError[0]);
 
     _mShaderProgramID = glCreateProgram();
     glAttachShader(_mShaderProgramID, vertexShaderID);
@@ -72,7 +94,76 @@ void ShaderWrapper::ProcessTechnique(string vs, string ps)
     glGetProgramiv(_mShaderProgramID, GL_INFO_LOG_LENGTH, &logLength);
     vector<char> programError( (logLength > 1) ? logLength : 1 );
     glGetProgramInfoLog(_mShaderProgramID, logLength, NULL, &programError[0]);
-    __android_log_print(ANDROID_LOG_DEBUG, "ShaderWrapper.cpp", "Program Error: %s", &programError[0]);
+    //__android_log_print(ANDROID_LOG_DEBUG, "ShaderWrapper.cpp", "Program Error: %s", &programError[0]);
+
+    if(fragShaderStr) delete fragShaderStr;
+    if(vertShaderStr) delete vertShaderStr;
+
+    glDeleteShader(vertexShaderID);
+    glDeleteShader(fragmentShaderID);
+}
+
+void ShaderWrapper::ProcessTechnique(string vs, string ps)
+{
+	//Clear every attribute & uniform previously defined so we can start over
+	_mAttribute.clear();
+	_mUniform.clear();
+
+	//Create unique ID and process shaders
+	GLuint vertexShaderID, fragmentShaderID;
+	vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+	fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+
+	//Get shader source
+    //const char *vertShaderStr = vs.c_str();
+    //const char *fragShaderStr = ps.c_str();
+
+    char *vertShaderStr = NULL;
+    char *fragShaderStr = NULL;
+    unsigned int size = 0;
+
+    FileReader::Read("gouraud.vert", &vertShaderStr, &size);
+    FileReader::Read("gouraud.frag", &fragShaderStr, &size);
+
+    GLint result = GL_FALSE;
+    int logLength;
+
+    //Compile vertex shader
+    glShaderSource(vertexShaderID, 1, &vertShaderStr, NULL);
+    glCompileShader(vertexShaderID);
+
+    // Check vertex shader
+    glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &result);
+    glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &logLength);
+    vector<char> vertShaderError((logLength > 1) ? logLength : 1);
+    glGetShaderInfoLog(vertexShaderID, logLength, NULL, &vertShaderError[0]);
+    //__android_log_print(ANDROID_LOG_DEBUG, "ShaderWrapper.cpp", "Vertex Error: %s", &vertShaderError[0]);
+
+    // Compile fragment shader
+    glShaderSource(fragmentShaderID, 1, &fragShaderStr, NULL);
+    glCompileShader(fragmentShaderID);
+
+    // Check fragment shader
+    glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &result);
+    glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &logLength);
+    vector<char> fragShaderError((logLength > 1) ? logLength : 1);
+    glGetShaderInfoLog(fragmentShaderID, logLength, NULL, &fragShaderError[0]);
+    //__android_log_print(ANDROID_LOG_DEBUG, "ShaderWrapper.cpp", "Fragment Error: %s", &fragShaderError[0]);
+
+    _mShaderProgramID = glCreateProgram();
+    glAttachShader(_mShaderProgramID, vertexShaderID);
+    glAttachShader(_mShaderProgramID, fragmentShaderID);
+    glLinkProgram(_mShaderProgramID);
+    glUseProgram(_mShaderProgramID);
+
+    glGetProgramiv(_mShaderProgramID, GL_LINK_STATUS, &result);
+    glGetProgramiv(_mShaderProgramID, GL_INFO_LOG_LENGTH, &logLength);
+    vector<char> programError( (logLength > 1) ? logLength : 1 );
+    glGetProgramInfoLog(_mShaderProgramID, logLength, NULL, &programError[0]);
+    //__android_log_print(ANDROID_LOG_DEBUG, "ShaderWrapper.cpp", "Program Error: %s", &programError[0]);
+
+    if(fragShaderStr) delete fragShaderStr;
+    if(vertShaderStr) delete vertShaderStr;
 
     glDeleteShader(vertexShaderID);
     glDeleteShader(fragmentShaderID);
