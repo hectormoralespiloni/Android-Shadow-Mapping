@@ -18,7 +18,7 @@ using namespace std;
 class ShaderWrapper
 {
 public:
-	enum technique {GOURAUD, PHONG, SHADOWMAP};
+	enum technique {GOURAUD, PHONG, SHADOWMAP, DEPTH};
 
 	ShaderWrapper();
 	~ShaderWrapper();

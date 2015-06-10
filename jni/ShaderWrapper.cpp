@@ -5,7 +5,7 @@
 //@Date:	April 15, 2015
 //-----------------------------------------------------------------------------
 #include <inc/ShaderWrapper.h>
-
+#include <android/log.h>
 
 ShaderWrapper::ShaderWrapper()
 {
@@ -38,6 +38,10 @@ void ShaderWrapper::ProcessTechnique(technique t)
 	case ShaderWrapper::SHADOWMAP:
 		vertFileName = "shadowmap.vert";
 		fragFileName = "shadowmap.frag";
+		break;
+	case ShaderWrapper::DEPTH:
+		vertFileName = "depth.vert";
+		fragFileName = "depth.frag";
 		break;
 	default:
 		break;

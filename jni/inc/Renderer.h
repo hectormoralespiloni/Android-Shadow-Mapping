@@ -17,6 +17,7 @@
 #include "Light.h"
 #include "Floor.h"
 #include "Cube.h"
+#include "Sphere.h"
 #include "ShaderWrapper.h"
 
 class Renderer
@@ -34,6 +35,12 @@ public:
 			int sizeU);			//Size of uniforms array
 
 private:
+	bool CreateShadowTexture();
+
+	GLuint _mShadowTextureID;
+	GLuint _mFBO;
+	GLuint _mRBO;
+
 	int _mWindowHeight;
 	int _mWindowWidth;
 
@@ -41,7 +48,7 @@ private:
 	Light *_mLight;
 	Floor *_mFloor;
 	Cube *_mCube;
-	//Sphere _mSphere;
+	Sphere *_mSphere;
 	//Torus _mTorus;
 
 	//Container that maps a shader technique with
