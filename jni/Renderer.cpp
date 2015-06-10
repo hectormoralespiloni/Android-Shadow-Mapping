@@ -27,23 +27,15 @@ Renderer::~Renderer()
 
 void Renderer::DrawFrame()
 {
-	/*
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	_mShader[ShaderWrapper::GOURAUD]->UseTechnique();
-	_mFloor->Draw();
-	_mCube->Draw();
-
-	_mShader[ShaderWrapper::PHONG]->UseTechnique();
-	_mSphere->Draw();
-	*/
-
 	//Rotate the light circulary
 	float angle = _mLight->GetRotation() + 1.0f;
 	if (angle >= 360) angle -= 360;
 	_mLight->SetRotation(angle);
-	__android_log_print(ANDROID_LOG_DEBUG, "Renderer.cpp", "Light's angle: %f", angle);
 
+	//-------------------------------------------------------------------------
+	//1st Pass: Light's point of view
+	//This will create the depth texture
+	//-------------------------------------------------------------------------
 	mat4x4 lookAtMatrix = glm::lookAt(_mLight->GetPosition(), vec3(0.0f,0.0f,0.0f), vec3(0.0f,1.0f,0.0f));
 	_mCamera->SetLookAtMatrix(lookAtMatrix);
 
@@ -58,6 +50,10 @@ void Renderer::DrawFrame()
 	_mCube->Draw();
 	_mSphere->Draw();
 
+	//-------------------------------------------------------------------------
+	//2nd Pass: Camera's point of view
+	//This will compare the distance stored in the depth texture vs eye
+	//-------------------------------------------------------------------------
 	lookAtMatrix = glm::lookAt(_mCamera->GetPosition(), vec3(0.0f,0.0f,0.0f), vec3(0.0f,1.0f,0.0f));
 	_mCamera->SetLookAtMatrix(lookAtMatrix);
 
@@ -203,7 +199,9 @@ bool Renderer::CreateShadowTexture()
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		return false;
-	else
+	else {
+		__android_log_print(ANDROID_LOG_DEBUG, "Renderer.cpp", "GOOD FBO");
 		return true;
+	}
 }
 
